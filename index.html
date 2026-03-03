@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mimmo - IdraulicoAntennista NPC</title>
+    <style>
+        body { 
+            font-family: 'Comic Sans MS', 'Trebuchet MS', sans-serif;
+            background-image: url('https://cdn.jsdelivr.net/gh/MiticoMimmoIdraulicoAntennista/Samba@main/Mimmo%20tetto.jpg'); 
+            background-size: 130%; 
+            background-position: 5% center; 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #1a1a1a;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: 0;
+        }
+
+        .reviews-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 255, 65, 0.2);
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            padding: 10px 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 100;
+        }
+
+        .reviews-link:hover {
+            background: #00ff41;
+            color: #000;
+            box-shadow: 0 0 15px #00ff41;
+        }
+
+        #reviews-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.95);
+            border: 3px solid #ff00ff;
+            padding: 25px;
+            border-radius: 25px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 200;
+            color: white;
+            box-shadow: 0 0 50px rgba(255, 0, 255, 0.6);
+        }
+
+        #reviews-box::-webkit-scrollbar { width: 10px; }
+        #reviews-box::-webkit-scrollbar-thumb { background: #ff00ff; border-radius: 10px; }
+
+        .review-item {
+            border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+            padding: 15px 0;
+            text-align: left;
+        }
+
+        .review-text { font-style: italic; display: block; margin-bottom: 5px; font-size: 0.95rem; }
+
+        .review-info {
+            font-size: 0.8rem;
+            color: #00ff41;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .container { 
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.75); 
+            backdrop-filter: blur(10px);
+            border: 4px solid #00ff41; 
+            padding: 30px; 
+            border-radius: 30px; 
+            text-align: center; 
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5); 
+            max-width: 450px;
+            width: 90%;
+            color: white;
+            z-index: 10;
+        }
+
+        .profile-pic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 4px solid #ff00ff;
+            margin-bottom: 15px;
+            box-shadow: 0 0 20px #ff00ff;
+            object-fit: cover;
+        }
+
+        h1 { font-size: 1.7rem; color: #00ff41; text-shadow: 2px 2px #000; margin: 10px 0; }
+        
+        .tagline { 
+            font-style: italic; 
+            font-size: 1.1rem; 
+            margin-bottom: 25px; 
+            color: #fff;
+            background: rgba(0, 255, 65, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .btn-list { display: flex; flex-direction: column; gap: 15px; }
+
+        .btn { 
+            display: flex; align-items: center; justify-content: center;
+            background: #00ff41; color: #000; text-decoration: none;
+            padding: 15px; border-radius: 50px; font-weight: bold;
+            font-size: 1.1rem; transition: 0.3s; border: none; cursor: pointer;
+        }
+
+        .btn:hover { transform: scale(1.05); background: #fff; }
+        .btn-audio { background: #ff00ff; color: white; }
+
+        #myAudio {
+            width: 100%; margin-top: 15px; height: 35px;
+            filter: invert(100%) hue-rotate(90deg) brightness(1.5);
+            display: none; 
+        }
+
+        .status-badge {
+            display: inline-block; margin-top: 25px;
+            background: rgba(0,0,0,0.8); padding: 8px 15px;
+            border-radius: 20px; font-size: 0.9rem;
+            border: 1px solid #00ff41; color: #00ff41;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reviews-link" onclick="toggleReviews()">⭐ Archivio Storico</div>
+
+    <div id="reviews-box">
+        <h3 style="color:#ff00ff; text-align: center;">40+ Anni di Onorata Carriera:</h3>
+        
+        <div class="review-item">
+            <span class="review-text">"Antenna installata tra i lampi dell'83. Vedo ancora i Mondiali '82 a ripetizione. Pioniere vero."</span>
+            <div class="review-info"><span>- Nonno Felice</span><span>12-01-1983</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Ha sturato il lavandino con un colpo di bacino degno di Elvis. Samba pura!"</span>
+            <div class="review-info"><span>- Mara la Casalinga</span><span>03-05-1983</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Montata antenna e ora prendo le radio pirata di Londra. Un genio dei segnali."</span>
+            <div class="review-info"><span>- DJ Turbo</span><span>20-11-1984</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Riparato il boiler mentre faceva il moonwalk nel corridoio. Indimenticabile."</span>
+            <div class="review-info"><span>- Samantha 80s</span><span>15-02-1985</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Mi ha detto: 'Senza la benna si scava meglio'. Aveva ragione lui, tubi perfetti."</span>
+            <div class="review-info"><span>- Geometra Rossi</span><span>09-07-1986</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Antenna montata. Vedo Drive In in un modo così nitido che sembra di stare lì."</span>
+            <div class="review-info"><span>- Paninaro DOC</span><span>11-12-1987</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Tubi nuovi, vita nuova. Mimmo ha portato la Samba in cantiere e siamo tutti più felici."</span>
+            <div class="review-info"><span>- Muratore Allegro</span><span>22-04-1988</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Ha sistemato lo scarico parlando con i tubi in una lingua antica. Ha funzionato."</span>
+            <div class="review-info"><span>- Lo Sciamano</span><span>18-10-1989</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Notti Magiche trasmesse dall'antenna di Mimmo. Segnale atomico per Italia '90."</span>
+            <div class="review-info"><span>- Ultras deluso</span><span>14-06-1990</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Cambiato il rubinetto usando una chiave inglese d'oro. Almeno così brillava."</span>
+            <div class="review-info"><span>- La Baronessa</span><span>05-01-1991</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Mi ha salvato dal fango. Niente benna, solo olio di gomito e canzoni brasiliane."</span>
+            <div class="review-info"><span>- L'Agricoltore</span><span>25-05-1992</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Parabolica gigante installata. Ora vedo anche i satelliti russi segreti."</span>
+            <div class="review-info"><span>- Spia per caso</span><span>30-09-1993</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Sturato tutto in 5 minuti. Mi ha regalato una cassetta della Samba. Un mito."</span>
+            <div class="review-info"><span>- Pippo lo Zozzo</span><span>12-03-1994</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Ha riparato la doccia e ora l'acqua esce a ritmo di musica. Mi lavo ballando."</span>
+            <div class="review-info"><span>- Ballerina di fila</span><span>19-08-1995</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Antenna installata. Prendo il segnale del futuro, ho visto chi vince Sanremo 2000."</span>
+            <div class="review-info"><span>- Veggente locale</span><span>07-11-1996</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Mi ha spiegato che la benna è il male. Ora scavo solo con il cucchiaio."</span>
+            <div class="review-info"><span>- Ugo lo Stressato</span><span>02-04-1997</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Caldaia esplosa? Mimmo l'ha domata con uno sguardo fisso e un fischio."</span>
+            <div class="review-info"><span>- Pompiere in pensione</span><span>15-10-1998</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Riparato il modem 56k usando lo stagnatore dell'antenna. Navigo a cannone!"</span>
+            <div class="review-info"><span>- Webmaster99</span><span>21-12-1999</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Millennium Bug sconfitto dai tubi di Mimmo. Il PC non è esploso. Miracolo."</span>
+            <div class="review-info"><span>- Sistemista ansioso</span><span>01-01-2000</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Antenna digitale terrestre ante-litteram. Vedo i pixel che mi salutano."</span>
+            <div class="review-info"><span>- Cinefilo</span><span>14-06-2001</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Samba in cucina mentre cambiava il sifone. Ho imparato a ballare e non perdo più acqua."</span>
+            <div class="review-info"><span>- Zia Concetta</span><span>28-02-2002</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Mi ha vietato di usare la benna pure per piantare i tulipani. Rigoroso."</span>
+            <div class="review-info"><span>- Giardiniere</span><span>05-05-2003</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Scarico intasato da anni, Mimmo ha usato la telepatia idraulica. Incredibile."</span>
+            <div class="review-info"><span>- L'Incredulo</span><span>19-11-2004</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Antenna puntata verso il sole. Ora vedo le macchie solari in diretta."</span>
+            <div class="review-info"><span>- Astronomo dilettante</span><span>10-08-2005</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Mondiali vinti grazie al segnale pulitissimo di Mimmo. Vedevo pure i peli di Grosso."</span>
+            <div class="review-info"><span>- Tifoso sfegatato</span><span>10-07-2006</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Ha montato il clima facendo la Macarena sul tetto. Rinfrescata ed emozioni."</span>
+            <div class="review-info"><span>- Caldo estivo</span><span>15-08-2007</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Riparato il tubo della lavatrice. Niente alluvione, solo una festa improvvisata."</span>
+            <div class="review-info"><span>- La Vicina</span><span>02-03-2008</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Antenna HD installata. Vedo i pori della pelle dei politici in TV. Troppo reale."</span>
+            <div class="review-info"><span>- Critico TV</span><span>12-10-2009</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Mimmo è l'NPC più avanzato del quartiere. Le sue quest idrauliche sono leggendarie."</span>
+            <div class="review-info"><span>- Gamer Pro</span><span>01-04-2010</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Senza benna la vita è più serena. Mimmo mi ha aperto gli occhi sui lavori manuali."</span>
+            <div class="review-info"><span>- Filosofo di strada</span><span>22-09-2011</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Fine del mondo 2012 evitata perché Mimmo ha stretto la vite del destino."</span>
+            <div class="review-info"><span>- Complottista</span><span>21-12-2012</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Antenna messa sul tetto più alto. Vedo il mare dalla pianura padana."</span>
+            <div class="review-info"><span>- Sognatore</span><span>05-06-2013</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Caldaia a condensazione montata con una grazia che manco l'étoile della Scala."</span>
+            <div class="review-info"><span>- Appassionato d'opera</span><span>18-11-2014</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Samba e idraulica: il binomio che non sapevo di volere ma di cui avevo bisogno."</span>
+            <div class="review-info"><span>- Hipster di città</span><span>25-01-2015</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Prendo i canali giapponesi senza decoder. Mimmo ha piegato lo spazio-tempo."</span>
+            <div class="review-info"><span>- Otaku incallito</span><span>30-07-2016</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Tubi in titanio installati da Mimmo. Pronti per la prossima era glaciale."</span>
+            <div class="review-info"><span>- Prepper</span><span>12-05-2017</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Mi ha convinto a vendere la benna su eBay. Ora sono un uomo libero."</span>
+            <div class="review-info"><span>- Ex-operatore macchine</span><span>14-09-2018</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Antenna 5G installata a mani nude urlando 'Samba!'. Segnale imbattibile."</span>
+            <div class="review-info"><span>- Influencer tech</span><span>20-03-2019</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Smart working salvo durante il lockdown grazie ai cablaggi magici di Mimmo."</span>
+            <div class="review-info"><span>- Impiegato remoto</span><span>10-04-2020</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"NFT del mio rubinetto creato da Mimmo. Vale più della mia casa ora."</span>
+            <div class="review-info"><span>- Crypto Bro</span><span>05-12-2021</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Samba nel metaverso con Mimmo. È l'avatar più cool di Polygon."</span>
+            <div class="review-info"><span>- Esploratore VR</span><span>18-06-2022</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Intervento in un secondo. Non ho fatto in tempo a dire 'aiuto' che Mimmo era già lì."</span>
+            <div class="review-info"><span>- Flash</span><span>11-02-2023</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Antenna Web3 installata. Vedo la blockchain scorrere nelle nuvole."</span>
+            <div class="review-info"><span>- Sognatore decentralizzato</span><span>22-09-2024</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Idraulica quantistica: il tubo è sia rotto che aggiustato finché Mimmo non apre l'acqua."</span>
+            <div class="review-info"><span>- Fisico nucleare</span><span>15-01-2025</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Senza benna ho trovato un tesoro romano sturando il cesso. Mimmo porta bene."</span>
+            <div class="review-info"><span>- Archeologo dilettante</span><span>01-03-2026</span></div>
+        </div>
+        <div class="review-item">
+            <span class="review-text">"Mimmo è l'unico eroe rimasto in questo mondo di bulloni allentati."</span>
+            <div class="review-info"><span>- Fan numero 1</span><span>03-03-2026</span></div>
+        </div>
+
+        <p onclick="toggleReviews()" style="margin-top:20px; cursor:pointer; text-decoration:underline; text-align: center;">[ CHIUDI ARCHIVIO STORICO ]</p>
+    </div>
+
+    <div class="container">
+        <img src="https://cdn.jsdelivr.net/gh/MiticoMimmoIdraulicoAntennista/Samba@main/PickMimmo.jpg" alt="Mimmo Profilo" class="profile-pic">
+        
+        <h1>Mimmo Idraulico Antennista</h1>
+        <div class="tagline">"Due assi sopra ad un balcone! (Senza usar la benna)" 🛠️</div>
+
+        <div class="btn-list">
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; border: 1px solid #ff00ff;">
+                <button class="btn btn-audio" style="width: 100%;" onclick="mostraAudio()">
+                    🕺 FALLO!
+                </button>
+                <audio id="myAudio" controls>
+                    <source src="https://cdn.jsdelivr.net/gh/MiticoMimmoIdraulicoAntennista/Samba@main/voloco_mixdown.m4a" type="audio/mp4">
+                </audio>
+            </div>
+
+            <a href="https://opensea.io/0x85b131643a4b95a318697aaa8e769aeb8be494bf" target="_blank" class="btn">
+                🖼️ Le mie fotine NFT
+            </a>
+
+            <a href="mailto:ipotalamostressato@gmail.com" class="btn">
+                📧 Interventi in un secondo!
+            </a>
+            
+            <a href="tel:+393392225460" class="btn">
+                📞 Interventi in un secondo SOLO!
+            </a>
+        </div>
+
+        <div class="status-badge">
+            ⚡ STATO: In una partita intensa! (Senza la racchetta)
+        </div>
+    </div>
+
+    <script>
+        function mostraAudio() {
+            var audio = document.getElementById('myAudio');
+            audio.style.display = 'block';
+            audio.play();
+        }
+
+        function toggleReviews() {
+            var box = document.getElementById('reviews-box');
+            if (box.style.display === 'block') {
+                box.style.display = 'none';
+            } else {
+                box.style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>
